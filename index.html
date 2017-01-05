@@ -151,6 +151,7 @@
 
           //Add appropriate event listeners
           marker.addListener('click', function() {
+            this.defaultIcon = makeMarkerIcon('f442e2');
             populateInfoWindow(this, largeInfowindow);
           });
           marker.addListener('mouseover', function() {
