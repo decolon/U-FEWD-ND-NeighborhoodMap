@@ -1,3 +1,5 @@
+//NOTE: Much of this code is based off code from this nanodegree's lectures
+
 //List of all the locations that will be displayed in the app
 var locations = [{
         title: 'Golden Gate Bridge',
