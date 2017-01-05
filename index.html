@@ -114,17 +114,22 @@
       //Create New Map
       function initMap() {
         clearTimeout(googleTimeout);
+
+        //Set new map to poiont at SF
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 37.7817, lng: -122.4498},
           zoom: 13,
           disableDefaultUI: true
         });
 
+        //Create different icons to be used as user feedback
         var defaultIcon = makeMarkerIcon('ff3321');
         var highlightedIcon = makeMarkerIcon('22e018');
 
+        //Prepare and info window for displaying extra data
         var largeInfowindow = new google.maps.InfoWindow();
 
+        //For each location, make a new marker
         for (var i = 0; i < locations.length; i++) {
 
           var position = locations[i].location;
@@ -140,7 +145,11 @@
           });
           marker.infoWindow = largeInfowindow;
           marker.defaultIcon = defaultIcon;
+
+          //Push all markers into the global markers array
           markers.push(marker);
+
+          //Add appropriate event listeners
           marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
           });
@@ -153,8 +162,10 @@
         }
       }
 
-      //Make Info Window
+      //Populates info window with appropriate information
       function populateInfoWindow(marker, infowindow) {
+
+        //Set up basic information
         if (infowindow.marker != marker) {
           infowindow.setContent('');
           infowindow.marker = marker;
@@ -164,6 +175,8 @@
             marker.defaultIcon = makeMarkerIcon('ff3321');
             infowindow.marker = null;
           });
+
+          //Add street view information
           var streetViewService = new google.maps.StreetViewService();
           var radius = 50;
 
@@ -188,17 +201,21 @@
               var panorama = new google.maps.StreetViewPanorama(
                 document.getElementById('pano'), panoramaOptions);
             } else {
+              //Displayed if no street view image could be found
               $("#pano").text("No Street View Found");
             }
           }
 
+          //Add information from Wikipidia
           function getWikipidia() {
             var wikiUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + marker.title + "&limit=1&namespace=0&format=json";
 
+            //Timeout for error handleing
             var wikiRequestTimeout = setTimeout( function () {
               $('#wiki').text("Could not find Wikipedia Data");
             }, 1000);
 
+            //Request information from Wikipidia
             $.ajax({
               url: wikiUrl,
               dataType: 'jsonp',
@@ -211,12 +228,14 @@
             });
           }
 
+          //Kick off requests for street view and wikipidia
           streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
           getWikipidia();
           infowindow.open(map, marker);
         }
       }
 
+      //Creates marker icons with the given color
       function makeMarkerIcon(markerColor) {
         var markerImage = new google.maps.MarkerImage(
           'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + '|40|_|%E2%80%A2',
@@ -227,6 +246,7 @@
         return markerImage;
       }
 
+      //Used to display text if google maps api could not load
       var googleTimeout = setTimeout( function () {
         $('#map').append("<p>Could not load google maps api</p>");
       }, 1000);
