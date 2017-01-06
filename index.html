@@ -3,94 +3,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      html,
-      body {
-        font-family: Arial, sans-serif;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        height: 100%;
-      }
-
-      #pano {
-        width: 200px;
-        height: 200px;
-      }
-
-      #wiki {
-        width: 200px;
-      }
-      #bar {
-        height: 40px;
-        background-color: #2f3030;
-      }
-      #hamburger {
-        color: #FFFFFF;
-        font-size: 35px;
-        padding-left: 15px;
-        cursor: pointer;
-      }
-      .menu {
-        z-index: 1;
-        width: 0;
-        height: 100%;
-        position: fixed;
-        overflow-x: hidden;
-        top: 0;
-        left: 0;
-        padding-top: 60px;
-        transition: 0.5s;
-        background-color: #2f3030;
-      }
-
-      .closebtn {
-        color: #FFFFFF;
-        cursor: pointer;
-        text-decoration: none;
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-      }
-
-      #main {
-        transition: margin-left .5s;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .menu li {
-        padding: 8px 8px 8px 0px;
-        text-decoration: none;
-        font-size: 20px;
-        color: #FFFFFF;
-        display: block;
-        transition: 0.3s
-        list-style-type: none;
-        cursor: pointer;
-      }
-
-      .filter {
-        display: inline-block;
-        width: 75%;
-        padding: 10px 20px;
-        border: 1px solid #b7b7b7;
-        -webkit-border-radius: 8px;
-        border-radius: 8px;
-        margin-left: 10px;
-      }
-
-      @media screen and (max-height: 450px) {
-        .menu{padding-top: 15px;}
-        .menu a {font-size: 18px;}
-      }
-
-    </style>
+    <title>Neighborhood Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
   <body>
 
@@ -109,9 +24,21 @@
     </div>
 
     <script>
-      var map;
+      var map, infowindow;
 
       var markers = [];
+
+      /* Set the width of the side navigation to 250px */
+      function openNav() {
+        $('#sideNav').css('width', '250px');
+        $('#main').css('marginLeft', '250px');
+      }
+
+      /* Set the width of the side navigation to 0 */
+      function closeNav() {
+        $('#sideNav').css('width', '0px');
+        $('#main').css('marginLeft', '0px');
+      }
 
       //Create New Map
       function initMap() {
@@ -132,7 +59,7 @@
           var highlightedIcon = makeMarkerIcon('22e018');
 
           //Prepare and info window for displaying extra data
-          var largeInfowindow = new google.maps.InfoWindow();
+          infowindow = new google.maps.InfoWindow();
 
           //For each location, make a new marker
           for (var i = 0; i < locations.length; i++) {
@@ -148,7 +75,7 @@
                   icon: defaultIcon,
                   id: i
               });
-              marker.infoWindow = largeInfowindow;
+
               marker.defaultIcon = defaultIcon;
 
               //Push all markers into the global markers array
@@ -156,8 +83,8 @@
 
               //Add appropriate event listeners
               marker.addListener('click', function() {
-                  this.defaultIcon = makeMarkerIcon('f442e2');
-                  populateInfoWindow(this, largeInfowindow);
+                  this.defaultIcon = makeMarkerIcon('ffffff');
+                  populateInfoWindow(this);
               });
               marker.addListener('mouseover', function() {
                   this.setIcon(highlightedIcon);
@@ -169,10 +96,15 @@
       }
 
       //Populates info window with appropriate information
-      function populateInfoWindow(marker, infowindow) {
+      function populateInfoWindow(marker) {
 
           //Set up basic information
           if (infowindow.marker != marker) {
+              if (infowindow.marker) {
+                 infowindow.marker.defaultIcon = makeMarkerIcon('ff3321');
+                 infowindow.marker.setIcon(infowindow.marker.defaultIcon);
+              }
+
               infowindow.setContent('');
               infowindow.marker = marker;
               infowindow.setContent('<h1>' + marker.title + '</h1><div id="pano"></div><p id="wiki"></p>');
@@ -260,7 +192,6 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="js/menuToggle.js"></script>
     <script src="js/app.js"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC58npQfbraWbdf4Zy9kIiq36S2zP7goKY&v=3&callback=initMap">

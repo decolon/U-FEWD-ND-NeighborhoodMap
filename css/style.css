@@ -1,0 +1,84 @@
+html,
+body {
+  font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#map {
+  height: 100%;
+}
+
+#pano {
+  width: 200px;
+  height: 200px;
+}
+
+#wiki {
+  width: 200px;
+}
+#bar {
+  height: 40px;
+  background-color: #2f3030;
+}
+#hamburger {
+  color: #FFFFFF;
+  font-size: 35px;
+  padding-left: 15px;
+  cursor: pointer;
+}
+.menu {
+  z-index: 1;
+  width: 0;
+  height: 100%;
+  position: fixed;
+  overflow-x: hidden;
+  top: 0;
+  left: 0;
+  padding-top: 60px;
+  transition: 0.5s;
+  background-color: #2f3030;
+}
+
+.closebtn {
+  color: #FFFFFF;
+  cursor: pointer;
+  text-decoration: none;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.menu li {
+  padding: 8px 8px 8px 0px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #FFFFFF;
+  display: block;
+  transition: 0.3s;
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.filter {
+  display: inline-block;
+  width: 75%;
+  padding: 10px 20px;
+  border: 1px solid #b7b7b7;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .menu{padding-top: 15px;}
+  .menu a {font-size: 18px;}
+}
